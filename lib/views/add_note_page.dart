@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+<<<<<<< HEAD
 import 'package:notes_app/views/home_page.dart';
+=======
+>>>>>>> 6d721a4 (Resolved merge cinflicts)
 
 import '../cubits/notes_cubit/notes_cubit.dart';
 import '../models/note_model.dart';
@@ -33,9 +36,15 @@ class _AddNotePageState extends State<AddNotePage> {
     final note = NoteModel(
       title: titleController.text.trim(),
       content: contentController.text.trim(),
+<<<<<<< HEAD
       isFav: false,
       date: DateTime.now().toString(),
       isDeleted: false,
+=======
+         isFav: false,
+      date: DateTime.now().toString(),
+       isDeleted: false,
+>>>>>>> 6d721a4 (Resolved merge cinflicts)
     );
 
     context.read<NotesCubit>().AddNote(note);
@@ -56,19 +65,31 @@ class _AddNotePageState extends State<AddNotePage> {
               children: [
                 const SizedBox(height: 12),
 
+<<<<<<< HEAD
+=======
+                // AppBar العلوي
+>>>>>>> 6d721a4 (Resolved merge cinflicts)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _buildIconButton(
                       icon: Icons.arrow_back_ios_new_rounded,
+<<<<<<< HEAD
                       onTap: () {
                         Navigator.pop(context);
                       },
+=======
+                      onTap: () => Navigator.pop(context),
+>>>>>>> 6d721a4 (Resolved merge cinflicts)
                     ),
                     const Text(
                       'Title',
                       style: TextStyle(
+<<<<<<< HEAD
                         fontSize: 25,
+=======
+                        fontSize: 18,
+>>>>>>> 6d721a4 (Resolved merge cinflicts)
                         fontWeight: FontWeight.bold,
                         color: Colors.black87,
                       ),
@@ -85,6 +106,10 @@ class _AddNotePageState extends State<AddNotePage> {
 
                 const SizedBox(height: 16),
 
+<<<<<<< HEAD
+=======
+                // حقل عنوان الملاحظة
+>>>>>>> 6d721a4 (Resolved merge cinflicts)
                 Container(
                   decoration: BoxDecoration(
                     color: const Color(0xFFC5C3D6),
@@ -118,6 +143,10 @@ class _AddNotePageState extends State<AddNotePage> {
 
                 const SizedBox(height: 16),
 
+<<<<<<< HEAD
+=======
+                // حقل محتوى الملاحظة
+>>>>>>> 6d721a4 (Resolved merge cinflicts)
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.all(16),
@@ -148,13 +177,21 @@ class _AddNotePageState extends State<AddNotePage> {
 
                 const SizedBox(height: 16),
 
+<<<<<<< HEAD
+=======
+                // زر حفظ الملاحظة
+>>>>>>> 6d721a4 (Resolved merge cinflicts)
                 SizedBox(
                   width: double.infinity,
                   height: 48,
                   child: ElevatedButton(
                     onPressed: saveNote,
                     style: ElevatedButton.styleFrom(
+<<<<<<< HEAD
                       backgroundColor: HomePage.darkPurple,
+=======
+                      backgroundColor: const Color(0xFF8B73E2),
+>>>>>>> 6d721a4 (Resolved merge cinflicts)
                       elevation: 4,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24),
@@ -180,6 +217,7 @@ class _AddNotePageState extends State<AddNotePage> {
     );
   }
 
+<<<<<<< HEAD
   Widget _buildIconButton({
     required IconData icon,
     required VoidCallback onTap,
@@ -187,6 +225,13 @@ class _AddNotePageState extends State<AddNotePage> {
     return Container(
       decoration: BoxDecoration(
         color: HomePage.darkPurple,
+=======
+  // ودجت المساعدة لأزرار الـ AppBar
+  Widget _buildIconButton({required IconData icon, required VoidCallback onTap}) {
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFF8B73E2),
+>>>>>>> 6d721a4 (Resolved merge cinflicts)
         borderRadius: BorderRadius.circular(8),
       ),
       child: IconButton(
@@ -197,4 +242,8 @@ class _AddNotePageState extends State<AddNotePage> {
       ),
     );
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 6d721a4 (Resolved merge cinflicts)
