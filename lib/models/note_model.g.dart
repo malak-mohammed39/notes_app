@@ -21,7 +21,7 @@ class NoteModelAdapter extends TypeAdapter<NoteModel> {
       content: fields[1] as String,
       isFav: fields[3] as bool,
       date: fields[2] as String,
-      isdeteted: fields[4] as bool,
+      isDeleted: fields[4] as bool,
     );
   }
 
@@ -38,7 +38,7 @@ class NoteModelAdapter extends TypeAdapter<NoteModel> {
       ..writeByte(3)
       ..write(obj.isFav)
       ..writeByte(4)
-      ..write(obj.isdeteted);
+      ..write(obj.isDeleted);
   }
 
   @override

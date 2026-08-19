@@ -14,7 +14,7 @@ class NotesCubit extends Cubit<NotesState> {
     try {
       var box = Hive.box<NoteModel>(boxName);
 
-      allNotes = box.values.where((note) => !note.isdeteted).toList();
+      allNotes = box.values.where((note) => !note.isDeleted).toList();
 
       emit(NotesSuccess(allNotes!));
     } catch (e) {
@@ -27,7 +27,7 @@ class NotesCubit extends Cubit<NotesState> {
       var box = Hive.box<NoteModel>(boxName);
 
       final FavNotes = box.values
-          .where((note) => !note.isdeteted && note.isFav)
+          .where((note) => !note.isDeleted && note.isFav)
           .toList();
 
       emit(NotesSuccess(FavNotes));
@@ -40,7 +40,7 @@ class NotesCubit extends Cubit<NotesState> {
     try {
       var box = Hive.box<NoteModel>(boxName);
 
-      final DeletedNotes = box.values.where((note) => note.isdeteted).toList();
+      final DeletedNotes = box.values.where((note) => note.isDeleted).toList();
 
       emit(NotesSuccess(DeletedNotes));
     } catch (e) {
@@ -61,7 +61,7 @@ class NotesCubit extends Cubit<NotesState> {
   }
 
   void MoveToTrach(NoteModel note) async {
-    note.isdeteted = true;
+    note.isDeleted = true;
 
     await note.save();
 
@@ -69,7 +69,7 @@ class NotesCubit extends Cubit<NotesState> {
   }
 
   void Restoring(NoteModel note) async {
-    note.isdeteted = false;
+    note.isDeleted = false;
 
     await note.save();
 

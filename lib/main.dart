@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'models/note_model.dart';
 import 'cubits/notes_cubit/notes_cubit.dart';
 import 'views/home_page.dart';
+import 'views/first_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +28,7 @@ class NotesApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(useMaterial3: true, brightness: Brightness.dark),
-        home: const HomePage(),
+        home: const FirstPage(),
       ),
     );
   }
