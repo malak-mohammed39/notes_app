@@ -62,10 +62,8 @@ class NotesCubit extends Cubit<NotesState> {
 
   void MoveToTrach(NoteModel note) async {
     note.isDeleted = true;
-
     await note.save();
-
-    fetchDeletedones();
+    fetchAllNotes();
   }
 
   void Restoring(NoteModel note) async {
