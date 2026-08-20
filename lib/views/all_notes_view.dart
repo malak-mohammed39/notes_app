@@ -52,11 +52,12 @@ class AllNotesView extends StatelessWidget {
               itemCount: notes.length,
               itemBuilder: (context, index) {
                 final NoteModel note = notes[index];
+                print("Note color =${note.color}");
                 return Container(
                   margin: const EdgeInsets.only(bottom: 12),
                   padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(
-                    color: HomePage.cardColor,
+                    color: Color(note.color),
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(

@@ -22,13 +22,14 @@ class NoteModelAdapter extends TypeAdapter<NoteModel> {
       isFav: fields[3] as bool,
       date: fields[2] as String,
       isDeleted: fields[4] as bool,
+      color: fields[5] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, NoteModel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
@@ -38,7 +39,9 @@ class NoteModelAdapter extends TypeAdapter<NoteModel> {
       ..writeByte(3)
       ..write(obj.isFav)
       ..writeByte(4)
-      ..write(obj.isDeleted);
+      ..write(obj.isDeleted)
+      ..writeByte(5)
+      ..write(obj.color);
   }
 
   @override
