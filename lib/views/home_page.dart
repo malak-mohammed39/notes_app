@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../cubits/notes_cubit/notes_cubit.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  // Colors
   // Background
   static const Color backgroundColor = Color(0xFFE8E2E8);
 
@@ -27,7 +28,8 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: backgroundColor,
 
-      
+      // ================= APP BAR =================
+
       appBar: AppBar(
         backgroundColor: backgroundColor,
         elevation: 0,
@@ -42,17 +44,20 @@ class HomePage extends StatelessWidget {
         ),
       ),
 
-      
+      // ================= BODY =================
+
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            
+
+            // ================= SEARCH =================
+
             Container(
               height: 50,
               width: double.infinity,
               decoration: BoxDecoration(
-               color: darkPurple,
+                color: darkPurple,
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
@@ -62,22 +67,32 @@ class HomePage extends StatelessWidget {
                   ),
                 ],
               ),
-              child: const TextField(
-                style: TextStyle(
+
+              child: TextField(
+                // Searching
+                onChanged: (value) {
+                  context.read<NotesCubit>().Searching(value);
+                },
+
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,
                 ),
-                decoration: InputDecoration(
+
+                decoration: const InputDecoration(
                   hintText: 'Search notes...',
                   hintStyle: TextStyle(
                     color: Colors.white70,
                     fontSize: 16,
                   ),
+
                   prefixIcon: Icon(
                     Icons.search,
                     color: Colors.white,
                   ),
+
                   border: InputBorder.none,
+
                   contentPadding: EdgeInsets.symmetric(
                     vertical: 14,
                   ),
@@ -87,29 +102,27 @@ class HomePage extends StatelessWidget {
 
             const Spacer(),
 
-            
-            
-            
+            // ================= SHOW DELETED NOTES =================
 
             Material(
               color: Colors.transparent,
               borderRadius: BorderRadius.circular(12),
+
               child: InkWell(
                 onTap: () {},
                 borderRadius: BorderRadius.circular(12),
 
-                
                 highlightColor: darkPurple.withOpacity(0.35),
-
-               
                 splashColor: purple.withOpacity(0.45),
 
                 child: Ink(
                   width: 600,
                   height: 50,
+
                   decoration: BoxDecoration(
                     color: cardColor,
                     borderRadius: BorderRadius.circular(12),
+
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.18),
@@ -118,8 +131,10 @@ class HomePage extends StatelessWidget {
                       ),
                     ],
                   ),
+
                   child: const Row(
                     children: [
+
                       SizedBox(width: 15),
 
                       Icon(
@@ -149,25 +164,27 @@ class HomePage extends StatelessWidget {
 
             const SizedBox(height: 10),
 
-           
+            // ================= SHOW FAVOURITE NOTES =================
+
             Material(
               color: Colors.transparent,
               borderRadius: BorderRadius.circular(12),
+
               child: InkWell(
                 onTap: () {},
                 borderRadius: BorderRadius.circular(12),
 
                 highlightColor: darkPurple.withOpacity(0.35),
-
-               
                 splashColor: purple.withOpacity(0.45),
 
                 child: Ink(
                   width: 600,
                   height: 50,
+
                   decoration: BoxDecoration(
                     color: cardColor,
                     borderRadius: BorderRadius.circular(12),
+
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.18),
@@ -176,8 +193,10 @@ class HomePage extends StatelessWidget {
                       ),
                     ],
                   ),
+
                   child: const Row(
                     children: [
+
                       SizedBox(width: 15),
 
                       Icon(
@@ -210,12 +229,14 @@ class HomePage extends StatelessWidget {
         ),
       ),
 
-      
+      // ================= ADD NOTE BUTTON =================
 
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
+
         backgroundColor: purple,
         elevation: 8,
+
         child: const Icon(
           Icons.add,
           color: Colors.white,
