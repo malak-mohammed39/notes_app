@@ -207,6 +207,9 @@ class _HomePageState extends State<HomePage> {
                     context,
                     MaterialPageRoute(builder: (context) => const TrashPage()),
                   );
+                  if (context.mounted) {
+                    context.read<NotesCubit>().fetchAllNotes();
+                  }
                 },
 
                 borderRadius: BorderRadius.circular(12),
