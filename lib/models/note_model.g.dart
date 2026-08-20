@@ -22,6 +22,7 @@ class NoteModelAdapter extends TypeAdapter<NoteModel> {
       isFav: fields[3] as bool,
       date: fields[2] as String,
       isDeleted: fields[4] as bool,
+      color:fields[5] as int,
     );
   }
 
