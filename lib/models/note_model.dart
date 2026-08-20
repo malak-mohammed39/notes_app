@@ -30,6 +30,5 @@ class NoteModel extends HiveObject {
     required this.isFav,
     required this.date,
     required this.isDeleted,
-    required this.color,
   });
 }
