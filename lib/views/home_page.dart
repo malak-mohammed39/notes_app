@@ -193,7 +193,7 @@ class _HomePageState extends State<HomePage> {
                             margin: const EdgeInsets.only(bottom: 12),
                             padding: const EdgeInsets.all(14),
                             decoration: BoxDecoration(
-                              color: card,
+                              color: Color(note.color),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Row(

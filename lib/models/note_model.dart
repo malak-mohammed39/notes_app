@@ -20,6 +20,9 @@ class NoteModel extends HiveObject {
   @HiveField(4)
   bool isDeleted;
 
+  @HiveField(5)
+  int color;
+
   NoteModel({
     // req means has to be exist in each class
     required this.title,
@@ -27,5 +30,6 @@ class NoteModel extends HiveObject {
     required this.isFav,
     required this.date,
     required this.isDeleted,
+    required this.color
   });
 }

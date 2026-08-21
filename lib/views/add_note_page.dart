@@ -19,6 +19,17 @@ class _AddNotePageState extends State<AddNotePage> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController contentController = TextEditingController();
 
+  final List<Color> noteColors = [
+    const Color(0xfffff3b0),
+    const Color(0xffbde0fe),
+    const Color(0xffcdeccf),
+    const Color(0xffffc8dd),
+    const Color(0xffdcc6ff),
+    const Color(0xffffd6a5),
+  ];
+
+  Color selectedColor = const Color(0xfffff3b0);
+
   @override
   void dispose() {
     titleController.dispose();
@@ -37,6 +48,7 @@ class _AddNotePageState extends State<AddNotePage> {
       isFav: false,
       date: DateTime.now().toString(),
       isDeleted: false,
+      color: selectedColor.value,
     );
 
     context.read<NotesCubit>().AddNote(note);
@@ -67,6 +79,7 @@ class _AddNotePageState extends State<AddNotePage> {
               children: [
                 const SizedBox(height: 12),
 
+                // AppBar العلوي
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -80,11 +93,12 @@ class _AddNotePageState extends State<AddNotePage> {
                     Text(
                       'Add Note',
                       style: TextStyle(
-                        fontSize: 25,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: text,
                       ),
                     ),
+
                     _buildIconButton(
                       icon: Icons.delete_outline,
                       color: buttonColor,
@@ -98,6 +112,7 @@ class _AddNotePageState extends State<AddNotePage> {
 
                 const SizedBox(height: 16),
 
+                // حقل عنوان الملاحظة
                 Container(
                   decoration: BoxDecoration(
                     color: card,
@@ -131,6 +146,7 @@ class _AddNotePageState extends State<AddNotePage> {
 
                 const SizedBox(height: 16),
 
+                // حقل محتوى الملاحظة
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.all(16),
@@ -163,6 +179,60 @@ class _AddNotePageState extends State<AddNotePage> {
 
                 const SizedBox(height: 16),
 
+                // اختيار لون النوت
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Choose note color !",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 10),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: noteColors.map((color) {
+                    final bool isSelected = selectedColor == color;
+
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedColor = color;
+                        });
+                      },
+                      child: Container(
+                        width: 38,
+                        height: 38,
+                        decoration: BoxDecoration(
+                          color: color,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: isSelected
+                                ? Colors.black
+                                : Colors.transparent,
+                            width: 2.5,
+                          ),
+                        ),
+                        child: isSelected
+                            ? const Icon(
+                                Icons.check,
+                                color: Colors.black87,
+                                size: 20,
+                              )
+                            : null,
+                      ),
+                    );
+                  }).toList(),
+                ),
+
+                const SizedBox(height: 16),
+
+                // زر حفظ الملاحظة
                 SizedBox(
                   width: double.infinity,
                   height: 48,
@@ -195,6 +265,7 @@ class _AddNotePageState extends State<AddNotePage> {
     );
   }
 
+  // ودجت المساعدة لأزرار الـ AppBar
   Widget _buildIconButton({
     required IconData icon,
     required Color color,
