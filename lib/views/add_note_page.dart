@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notes_app/cubits/notes_cubit/theme_cubit.dart';
 import 'package:notes_app/views/home_page.dart';
 
 import '../cubits/notes_cubit/notes_cubit.dart';
@@ -45,8 +46,18 @@ class _AddNotePageState extends State<AddNotePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = context.watch<ThemeCubit>().state;
+
+    final background = isDark
+        ? const Color(0xFF211D23)
+        : HomePage.backgroundColor;
+    final card = isDark ? const Color(0xFF332C36) : HomePage.cardColor;
+    final text = isDark ? Colors.white : HomePage.textColor;
+    final secondaryText = isDark ? Colors.white70 : Colors.black87;
+    final buttonColor = isDark ? const Color(0xFF4B3158) : HomePage.darkPurple;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFE8E8EC),
+      backgroundColor: background,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -61,20 +72,22 @@ class _AddNotePageState extends State<AddNotePage> {
                   children: [
                     _buildIconButton(
                       icon: Icons.arrow_back_ios_new_rounded,
+                      color: buttonColor,
                       onTap: () {
                         Navigator.pop(context);
                       },
                     ),
-                    const Text(
-                      'Title',
+                    Text(
+                      'Add Note',
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: text,
                       ),
                     ),
                     _buildIconButton(
                       icon: Icons.delete_outline,
+                      color: buttonColor,
                       onTap: () {
                         titleController.clear();
                         contentController.clear();
@@ -87,25 +100,25 @@ class _AddNotePageState extends State<AddNotePage> {
 
                 Container(
                   decoration: BoxDecoration(
-                    color: const Color(0xFFC5C3D6),
+                    color: card,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: TextFormField(
                     controller: titleController,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+                      color: text,
                     ),
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       hintText: 'Enter Title Here',
                       hintStyle: TextStyle(
-                        color: Colors.black54,
+                        color: isDark ? Colors.white60 : Colors.black54,
                         fontWeight: FontWeight.bold,
                       ),
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.symmetric(vertical: 14),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 14),
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
@@ -122,7 +135,7 @@ class _AddNotePageState extends State<AddNotePage> {
                   child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFC5C3D6),
+                      color: card,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: TextFormField(
@@ -130,10 +143,12 @@ class _AddNotePageState extends State<AddNotePage> {
                       maxLines: null,
                       expands: true,
                       textAlignVertical: TextAlignVertical.top,
-                      style: const TextStyle(color: Colors.black87),
-                      decoration: const InputDecoration(
+                      style: TextStyle(color: secondaryText, fontSize: 16),
+                      decoration: InputDecoration(
                         hintText: 'Start writing your note here!',
-                        hintStyle: TextStyle(color: Colors.white70),
+                        hintStyle: TextStyle(
+                          color: isDark ? Colors.white60 : Colors.black45,
+                        ),
                         border: InputBorder.none,
                       ),
                       validator: (value) {
@@ -154,7 +169,7 @@ class _AddNotePageState extends State<AddNotePage> {
                   child: ElevatedButton(
                     onPressed: saveNote,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: HomePage.darkPurple,
+                      backgroundColor: buttonColor,
                       elevation: 4,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24),
@@ -182,11 +197,12 @@ class _AddNotePageState extends State<AddNotePage> {
 
   Widget _buildIconButton({
     required IconData icon,
+    required Color color,
     required VoidCallback onTap,
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: HomePage.darkPurple,
+        color: color,
         borderRadius: BorderRadius.circular(8),
       ),
       child: IconButton(

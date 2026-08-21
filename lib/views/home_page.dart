@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../cubits/notes_cubit/theme_cubit.dart';
 import 'package:notes_app/views/edit_note_page.dart';
 import 'package:notes_app/views/fav_notes.dart';
 import '../cubits/notes_cubit/notes_cubit.dart';
@@ -24,14 +25,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool isDark = false;
-
-  void toggleTheme() {
-    setState(() {
-      isDark = !isDark;
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -40,6 +33,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = context.watch<ThemeCubit>().state;
+
     final background = isDark
         ? const Color(0xFF211D23)
         : HomePage.backgroundColor;
@@ -62,7 +57,6 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: background,
         elevation: 0,
         centerTitle: true,
-
         title: Text(
           'ALL NOTES',
           style: TextStyle(
@@ -71,17 +65,17 @@ class _HomePageState extends State<HomePage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-
         actions: [
           IconButton(
-            onPressed: toggleTheme,
+            onPressed: () {
+              context.read<ThemeCubit>().toggleTheme();
+            },
             icon: Icon(
               isDark ? Icons.dark_mode : Icons.light_mode,
               color: isDark ? Colors.white : HomePage.purple,
               size: 27,
             ),
           ),
-
           const SizedBox(width: 8),
         ],
       ),
@@ -89,18 +83,15 @@ class _HomePageState extends State<HomePage> {
       // ================= BODY =================
       body: Padding(
         padding: const EdgeInsets.all(16),
-
         child: Column(
           children: [
             // ================= SEARCH BAR =================
             Container(
               height: 50,
               width: double.infinity,
-
               decoration: BoxDecoration(
                 color: searchColor,
                 borderRadius: BorderRadius.circular(12),
-
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.12),
@@ -109,23 +100,16 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-
               child: TextField(
                 onChanged: (value) {
                   context.read<NotesCubit>().Searching(value);
                 },
-
                 style: const TextStyle(color: Colors.white, fontSize: 16),
-
                 decoration: const InputDecoration(
                   hintText: 'Search notes...',
-
                   hintStyle: TextStyle(color: Colors.white70, fontSize: 16),
-
                   prefixIcon: Icon(Icons.search, color: Colors.white),
-
                   border: InputBorder.none,
-
                   contentPadding: EdgeInsets.symmetric(vertical: 14),
                 ),
               ),
@@ -154,27 +138,22 @@ class _HomePageState extends State<HomePage> {
 
                     return ListView.builder(
                       itemCount: displayCount + (notes.length > 3 ? 1 : 0),
-
                       itemBuilder: (context, index) {
                         // ================= SHOW ALL NOTES =================
-
                         if (index == 3) {
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8),
-
                             child: InkWell(
                               onTap: () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => AllNotesView(),
+                                    builder: (context) => const AllNotesView(),
                                   ),
                                 );
                               },
-
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-
                                 children: [
                                   Text(
                                     'Show All Notes',
@@ -186,9 +165,7 @@ class _HomePageState extends State<HomePage> {
                                       fontSize: 16,
                                     ),
                                   ),
-
                                   const SizedBox(width: 4),
-
                                   Icon(
                                     Icons.arrow_forward_ios,
                                     size: 14,
@@ -212,46 +189,36 @@ class _HomePageState extends State<HomePage> {
                               ),
                             );
                           },
-
                           child: Container(
                             margin: const EdgeInsets.only(bottom: 12),
-
                             padding: const EdgeInsets.all(14),
-
                             decoration: BoxDecoration(
                               color: card,
                               borderRadius: BorderRadius.circular(12),
                             ),
-
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
-
                               children: [
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
-
                                     children: [
                                       Text(
                                         note.title,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
-
                                         style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
                                           color: text,
                                         ),
                                       ),
-
                                       const SizedBox(height: 6),
-
                                       Text(
                                         note.content,
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
-
                                         style: TextStyle(
                                           fontSize: 14,
                                           color: secondaryText,
@@ -260,7 +227,6 @@ class _HomePageState extends State<HomePage> {
                                     ],
                                   ),
                                 ),
-
                                 Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -269,7 +235,7 @@ class _HomePageState extends State<HomePage> {
                                         note.isFav
                                             ? Icons.favorite
                                             : Icons.favorite_border,
-                                        color: HomePage.darkPurple,
+                                        color: iconColor,
                                         size: 24,
                                       ),
                                       onPressed: () {
@@ -279,7 +245,7 @@ class _HomePageState extends State<HomePage> {
                                     IconButton(
                                       icon: Icon(
                                         Icons.delete_outline_rounded,
-                                        color: HomePage.darkPurple,
+                                        color: iconColor,
                                         size: 24,
                                       ),
                                       onPressed: () {
@@ -312,10 +278,10 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
 
+            // ================= TRASH BUTTON =================
             Material(
               color: Colors.transparent,
               borderRadius: BorderRadius.circular(12),
-
               child: InkWell(
                 onTap: () async {
                   await Navigator.push(
@@ -327,16 +293,12 @@ class _HomePageState extends State<HomePage> {
                     context.read<NotesCubit>().fetchAllNotes();
                   }
                 },
-
                 borderRadius: BorderRadius.circular(12),
-
                 child: Ink(
                   height: 50,
-
                   decoration: BoxDecoration(
                     color: card,
                     borderRadius: BorderRadius.circular(12),
-
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.18),
@@ -345,13 +307,10 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-
                   child: Row(
                     children: [
                       const SizedBox(width: 15),
-
                       Icon(Icons.delete, color: iconColor),
-
                       Expanded(
                         child: Center(
                           child: Text(
@@ -364,7 +323,6 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
-
                       const SizedBox(width: 40),
                     ],
                   ),
@@ -374,10 +332,10 @@ class _HomePageState extends State<HomePage> {
 
             const SizedBox(height: 10),
 
+            // ================= FAVOURITE BUTTON =================
             Material(
               color: Colors.transparent,
               borderRadius: BorderRadius.circular(12),
-
               child: InkWell(
                 onTap: () async {
                   await Navigator.push(
@@ -390,16 +348,12 @@ class _HomePageState extends State<HomePage> {
                     context.read<NotesCubit>().fetchAllNotes();
                   }
                 },
-
                 borderRadius: BorderRadius.circular(12),
-
                 child: Ink(
                   height: 50,
-
                   decoration: BoxDecoration(
                     color: card,
                     borderRadius: BorderRadius.circular(12),
-
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.18),
@@ -408,13 +362,10 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-
                   child: Row(
                     children: [
                       const SizedBox(width: 15),
-
                       Icon(Icons.favorite, color: iconColor),
-
                       Expanded(
                         child: Center(
                           child: Text(
@@ -427,7 +378,6 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
-
                       const SizedBox(width: 40),
                     ],
                   ),
@@ -441,13 +391,10 @@ class _HomePageState extends State<HomePage> {
       ),
 
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-
       floatingActionButton: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
           children: [
             InkWell(
               onTap: () {
@@ -456,17 +403,13 @@ class _HomePageState extends State<HomePage> {
                   MaterialPageRoute(builder: (context) => const FirstPage()),
                 );
               },
-
               child: Container(
                 height: 50,
-
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-
                 decoration: BoxDecoration(
-                  color: HomePage.darkPurple,
+                  color: isDark ? const Color(0xFF4B3158) : HomePage.darkPurple,
                   borderRadius: BorderRadius.circular(25),
                 ),
-
                 child: const Center(
                   child: Text(
                     "Back",
@@ -479,9 +422,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-
             const Spacer(),
-
             FloatingActionButton(
               onPressed: () {
                 Navigator.push(
@@ -489,11 +430,10 @@ class _HomePageState extends State<HomePage> {
                   MaterialPageRoute(builder: (context) => const AddNotePage()),
                 );
               },
-
-              backgroundColor: HomePage.darkPurple,
-
+              backgroundColor: isDark
+                  ? const Color(0xFF4B3158)
+                  : HomePage.darkPurple,
               elevation: 8,
-
               child: const Icon(Icons.add, color: Colors.white, size: 30),
             ),
           ],

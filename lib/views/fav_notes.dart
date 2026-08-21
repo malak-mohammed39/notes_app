@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:notes_app/models/note_model.dart';
 import 'package:notes_app/views/home_page.dart';
 import 'package:notes_app/views/edit_note_page.dart';
+import '../cubits/notes_cubit/theme_cubit.dart';
 
 class FavNotesView extends StatelessWidget {
   const FavNotesView({super.key});
@@ -10,24 +12,30 @@ class FavNotesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var notesBox = Hive.box<NoteModel>('notes_box');
+    final isDark = context.watch<ThemeCubit>().state;
+
+    final background = isDark
+        ? const Color(0xFF211D23)
+        : const Color(0xFFE8E2E8);
+    final card = isDark ? const Color(0xFF332C36) : const Color(0xFFC5B8C9);
+    final text = isDark ? Colors.white : const Color(0xFF29222B);
+    final secondaryText = isDark ? Colors.white70 : Colors.black87;
+    final iconColor = isDark ? Colors.white : const Color(0xFF68447D);
 
     return Scaffold(
-      backgroundColor: HomePage.backgroundColor,
+      backgroundColor: background,
       appBar: AppBar(
-        backgroundColor: HomePage.backgroundColor,
+        backgroundColor: background,
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: HomePage.textColor,
-          ),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, color: text),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'FAVOURITE NOTES',
           style: TextStyle(
-            color: HomePage.textColor,
+            color: text,
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
@@ -36,16 +44,18 @@ class FavNotesView extends StatelessWidget {
       body: ValueListenableBuilder<Box<NoteModel>>(
         valueListenable: notesBox.listenable(),
         builder: (context, box, _) {
-          // جلب الملاحظات المفضلة وغير المحذوفة فقط
           final favNotes = box.values
               .where((note) => note.isFav && !note.isDeleted)
               .toList();
 
           if (favNotes.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
                 'No favourite notes yet!',
-                style: TextStyle(color: Colors.grey, fontSize: 16),
+                style: TextStyle(
+                  color: isDark ? Colors.white70 : Colors.grey,
+                  fontSize: 16,
+                ),
               ),
             );
           }
@@ -69,7 +79,7 @@ class FavNotesView extends StatelessWidget {
                   margin: const EdgeInsets.only(bottom: 12),
                   padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(
-                    color: HomePage.cardColor,
+                    color: card,
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
@@ -90,10 +100,10 @@ class FavNotesView extends StatelessWidget {
                               note.title,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
-                                color: HomePage.textColor,
+                                color: text,
                               ),
                             ),
                             const SizedBox(height: 6),
@@ -101,21 +111,16 @@ class FavNotesView extends StatelessWidget {
                               note.content,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 14,
-                                color: Colors.black87,
+                                color: secondaryText,
                               ),
                             ),
                           ],
                         ),
                       ),
-
                       IconButton(
-                        icon: const Icon(
-                          Icons.favorite,
-                          color: HomePage.darkPurple,
-                          size: 24,
-                        ),
+                        icon: Icon(Icons.favorite, color: iconColor, size: 24),
                         onPressed: () async {
                           note.isFav = false;
                           await note.save();

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notes_app/cubits/notes_cubit/notes_cubit.dart';
 import 'package:notes_app/cubits/notes_cubit/notes_state.dart';
+import 'package:notes_app/cubits/notes_cubit/theme_cubit.dart';
 import 'package:notes_app/models/note_model.dart';
 import 'package:notes_app/views/home_page.dart';
 import 'package:notes_app/views/edit_note_page.dart';
@@ -11,24 +12,32 @@ class AllNotesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = context.watch<ThemeCubit>().state;
+
+    final background = isDark
+        ? const Color(0xFF211D23)
+        : HomePage.backgroundColor;
+    final card = isDark ? const Color(0xFF332C36) : HomePage.cardColor;
+    final text = isDark ? Colors.white : HomePage.textColor;
+    final secondaryText = isDark ? Colors.white70 : Colors.black87;
+    final iconColor = isDark ? Colors.white : HomePage.darkPurple;
+
     return Scaffold(
-      backgroundColor: HomePage.backgroundColor,
+      backgroundColor: background,
       appBar: AppBar(
-        backgroundColor: HomePage.backgroundColor,
+        backgroundColor: background,
         elevation: 0,
+        centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: HomePage.textColor,
-          ),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, color: text),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: const Text(
+        title: Text(
           'All Notes',
           style: TextStyle(
-            color: HomePage.textColor,
+            color: text,
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
@@ -40,10 +49,13 @@ class AllNotesView extends StatelessWidget {
             final notes = state.notes;
 
             if (notes.isEmpty) {
-              return const Center(
+              return Center(
                 child: Text(
                   'No notes available',
-                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                  style: TextStyle(
+                    color: isDark ? Colors.white70 : Colors.grey,
+                    fontSize: 16,
+                  ),
                 ),
               );
             }
@@ -66,7 +78,7 @@ class AllNotesView extends StatelessWidget {
                     margin: const EdgeInsets.only(bottom: 12),
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: HomePage.cardColor,
+                      color: card,
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
@@ -87,10 +99,10 @@ class AllNotesView extends StatelessWidget {
                                 note.title,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
-                                  color: HomePage.textColor,
+                                  color: text,
                                 ),
                               ),
                               const SizedBox(height: 6),
@@ -98,25 +110,41 @@ class AllNotesView extends StatelessWidget {
                                 note.content,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 14,
-                                  color: Colors.black87,
+                                  color: secondaryText,
                                 ),
                               ),
                             ],
                           ),
                         ),
-
-                        IconButton(
-                          icon: const Icon(
-                            Icons.delete_outline_rounded,
-                            color: HomePage.darkPurple,
-                            size: 24,
-                          ),
-                          onPressed: () {
-                            context.read<NotesCubit>().MoveToTrach(note);
-                            context.read<NotesCubit>().fetchAllNotes();
-                          },
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: Icon(
+                                note.isFav
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
+                                color: iconColor,
+                                size: 24,
+                              ),
+                              onPressed: () {
+                                context.read<NotesCubit>().addFav(note);
+                              },
+                            ),
+                            IconButton(
+                              icon: Icon(
+                                Icons.delete_outline_rounded,
+                                color: iconColor,
+                                size: 24,
+                              ),
+                              onPressed: () {
+                                context.read<NotesCubit>().MoveToTrach(note);
+                                context.read<NotesCubit>().fetchAllNotes();
+                              },
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -125,7 +153,9 @@ class AllNotesView extends StatelessWidget {
               },
             );
           } else if (state is NotesFailure) {
-            return Center(child: Text(state.errorMessage));
+            return Center(
+              child: Text(state.errorMessage, style: TextStyle(color: text)),
+            );
           }
           return const Center(child: CircularProgressIndicator());
         },

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../cubits/notes_cubit/theme_cubit.dart';
 import 'home_page.dart';
 
 class FirstPage extends StatelessWidget {
@@ -7,23 +8,31 @@ class FirstPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFE8E2E8),
+    final isDark = context.watch<ThemeCubit>().state;
 
+    final background = isDark
+        ? const Color(0xFF211D23)
+        : const Color(0xFFE8E2E8);
+    final titleText = isDark ? Colors.white : Colors.black;
+    final subtitleText = isDark ? Colors.white70 : Colors.black54;
+    final buttonColor = isDark
+        ? const Color(0xFF4B3158)
+        : const Color.fromARGB(255, 159, 147, 181);
+
+    return Scaffold(
+      backgroundColor: background,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
             return SingleChildScrollView(
               child: ConstrainedBox(
                 constraints: BoxConstraints(minHeight: constraints.maxHeight),
-
                 child: IntrinsicHeight(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 24,
                       vertical: 25,
                     ),
-
                     child: Column(
                       children: [
                         const Spacer(),
@@ -35,24 +44,22 @@ class FirstPage extends StatelessWidget {
 
                         const SizedBox(height: 30),
 
-                        const Text(
+                        Text(
                           'Create free notes & collaborate\nwith your team',
                           textAlign: TextAlign.center,
-
                           style: TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                            color: titleText,
                           ),
                         ),
 
                         const SizedBox(height: 20),
 
-                        const Text(
+                        Text(
                           'Capture your thoughts, organize your daily tasks, and keep everything in one place',
                           textAlign: TextAlign.center,
-
-                          style: TextStyle(fontSize: 18, color: Colors.black54),
+                          style: TextStyle(fontSize: 18, color: subtitleText),
                         ),
 
                         const Spacer(),
@@ -66,21 +73,16 @@ class FirstPage extends StatelessWidget {
                               ),
                             );
                           },
-
                           child: Container(
                             width: double.infinity,
                             height: 55,
-
                             decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 159, 147, 181),
-
+                              color: buttonColor,
                               borderRadius: BorderRadius.circular(25),
                             ),
-
                             child: const Center(
                               child: Text(
                                 "Get Started",
-
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../models/note_model.dart';
 import '../cubits/notes_cubit/notes_cubit.dart';
+import '../cubits/notes_cubit/theme_cubit.dart';
+import '../models/note_model.dart';
+import '../views/home_page.dart';
 
 class EditNotePage extends StatefulWidget {
   final NoteModel note;
@@ -15,10 +17,6 @@ class EditNotePage extends StatefulWidget {
 class _EditNotePageState extends State<EditNotePage> {
   late TextEditingController titleController;
   late TextEditingController contentController;
-
-  static const purple = Color(0xFF5C4B7D);
-  static const cardColor = Color(0xFFC5B8C9);
-  static const backgroundColor = Color(0xFFE8E2E8);
 
   @override
   void initState() {
@@ -50,8 +48,20 @@ class _EditNotePageState extends State<EditNotePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = context.watch<ThemeCubit>().state;
+
+    final background = isDark
+        ? const Color(0xFF211D23)
+        : HomePage.backgroundColor;
+    final card = isDark ? const Color(0xFF332C36) : HomePage.cardColor;
+    final text = isDark ? Colors.white : HomePage.textColor;
+    final secondaryText = isDark ? Colors.white70 : Colors.black87;
+    final buttonColor = isDark
+        ? const Color(0xFF4B3158)
+        : const Color(0xFF5C4B7D);
+
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: background,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -60,7 +70,7 @@ class _EditNotePageState extends State<EditNotePage> {
           padding: const EdgeInsets.all(8.0),
           child: Container(
             decoration: BoxDecoration(
-              color: purple,
+              color: buttonColor,
               borderRadius: BorderRadius.circular(10),
             ),
             child: IconButton(
@@ -74,10 +84,10 @@ class _EditNotePageState extends State<EditNotePage> {
             ),
           ),
         ),
-        title: const Text(
+        title: Text(
           'Edit Note',
           style: TextStyle(
-            color: Colors.black87,
+            color: text,
             fontWeight: FontWeight.bold,
             fontSize: 20,
           ),
@@ -87,7 +97,7 @@ class _EditNotePageState extends State<EditNotePage> {
             padding: const EdgeInsets.all(8.0),
             child: Container(
               decoration: BoxDecoration(
-                color: purple,
+                color: buttonColor,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: IconButton(
@@ -112,21 +122,24 @@ class _EditNotePageState extends State<EditNotePage> {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: cardColor,
+                color: card,
                 borderRadius: BorderRadius.circular(15),
               ),
               child: TextField(
                 controller: titleController,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: text,
                 ),
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Enter Title Here',
+                  hintStyle: TextStyle(
+                    color: isDark ? Colors.white60 : Colors.black45,
+                  ),
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(vertical: 14),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 14),
                 ),
               ),
             ),
@@ -135,7 +148,7 @@ class _EditNotePageState extends State<EditNotePage> {
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: cardColor,
+                  color: card,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: TextField(
@@ -143,12 +156,13 @@ class _EditNotePageState extends State<EditNotePage> {
                   maxLines: null,
                   expands: true,
                   textAlignVertical: TextAlignVertical.top,
-                  style: const TextStyle(color: Colors.black87, fontSize: 16),
-                  decoration: const InputDecoration(
+                  style: TextStyle(color: secondaryText, fontSize: 16),
+                  decoration: InputDecoration(
                     hintText: 'Start writing your note here!',
                     hintStyle: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
+                      color: isDark ? Colors.white60 : Colors.black45,
                     ),
                     border: InputBorder.none,
                   ),
@@ -161,7 +175,7 @@ class _EditNotePageState extends State<EditNotePage> {
               height: 50,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: purple,
+                  backgroundColor: buttonColor,
                   elevation: 2,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
