@@ -10,6 +10,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(NoteModelAdapter());
+
+  // فتح الـ Box بهيكله الجديد النظيف
   await Hive.openBox<NoteModel>('notes_box');
 
   runApp(const NotesApp());

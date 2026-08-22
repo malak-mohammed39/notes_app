@@ -15,9 +15,12 @@ class NoteModel extends HiveObject {
   final String date;
 
   @HiveField(3)
-  bool isFav;
+  int color;
 
   @HiveField(4)
+  bool isFav;
+
+  @HiveField(5)
   bool isDeleted;
 
   NoteModel({
@@ -25,6 +28,7 @@ class NoteModel extends HiveObject {
     required this.title,
     required this.content,
     required this.isFav,
+    required this.color,
     required this.date,
     required this.isDeleted,
   });

@@ -19,16 +19,17 @@ class NoteModelAdapter extends TypeAdapter<NoteModel> {
     return NoteModel(
       title: fields[0] as String,
       content: fields[1] as String,
-      isFav: fields[3] as bool,
       date: fields[2] as String,
-      isDeleted: fields[4] as bool,
+      color: fields[3] as int,
+      isDeleted: fields[4] == null ? false : fields[4] as bool,
+      isFav: fields[5] == null ? false : fields[5] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, NoteModel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
@@ -36,9 +37,11 @@ class NoteModelAdapter extends TypeAdapter<NoteModel> {
       ..writeByte(2)
       ..write(obj.date)
       ..writeByte(3)
-      ..write(obj.isFav)
+      ..write(obj.color)
       ..writeByte(4)
-      ..write(obj.isDeleted);
+      ..write(obj.isDeleted)
+      ..writeByte(5)
+      ..write(obj.isFav);
   }
 
   @override

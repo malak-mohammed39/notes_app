@@ -17,9 +17,7 @@ class AllNotesView extends StatelessWidget {
     final background = isDark
         ? const Color(0xFF211D23)
         : HomePage.backgroundColor;
-    final card = isDark ? const Color(0xFF332C36) : HomePage.cardColor;
     final text = isDark ? Colors.white : HomePage.textColor;
-    final secondaryText = isDark ? Colors.white70 : Colors.black87;
     final iconColor = isDark ? Colors.white : HomePage.darkPurple;
 
     return Scaffold(
@@ -78,7 +76,8 @@ class AllNotesView extends StatelessWidget {
                     margin: const EdgeInsets.only(bottom: 12),
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: card,
+                      // تطبيق لون النوت المخصص
+                      color: Color(note.color),
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
@@ -99,10 +98,10 @@ class AllNotesView extends StatelessWidget {
                                 note.title,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
-                                  color: text,
+                                  color: Colors.black87,
                                 ),
                               ),
                               const SizedBox(height: 6),
@@ -110,9 +109,9 @@ class AllNotesView extends StatelessWidget {
                                 note.content,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 14,
-                                  color: secondaryText,
+                                  color: Colors.black54,
                                 ),
                               ),
                             ],
@@ -126,7 +125,7 @@ class AllNotesView extends StatelessWidget {
                                 note.isFav
                                     ? Icons.favorite
                                     : Icons.favorite_border,
-                                color: iconColor,
+                                color: const Color(0xFF68447D),
                                 size: 24,
                               ),
                               onPressed: () {
@@ -134,9 +133,9 @@ class AllNotesView extends StatelessWidget {
                               },
                             ),
                             IconButton(
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.delete_outline_rounded,
-                                color: iconColor,
+                                color: Color(0xFF68447D),
                                 size: 24,
                               ),
                               onPressed: () {

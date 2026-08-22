@@ -18,11 +18,25 @@ class _EditNotePageState extends State<EditNotePage> {
   late TextEditingController titleController;
   late TextEditingController contentController;
 
+  final List<Color> colors = const [
+    Color(0xFFC5B8C9),
+    Color(0xFFFFAB91),
+    Color(0xFFFFCC80),
+    Color(0xFFE6EE9C),
+    Color(0xFF80CBC4),
+    Color(0xFF90CAF9),
+    Color(0xFFF48FB1),
+    Color(0xFFD7CCC8),
+  ];
+
+  late Color selectedColor;
+
   @override
   void initState() {
     super.initState();
     titleController = TextEditingController(text: widget.note.title);
     contentController = TextEditingController(text: widget.note.content);
+    selectedColor = Color(widget.note.color);
   }
 
   @override
@@ -41,6 +55,8 @@ class _EditNotePageState extends State<EditNotePage> {
         ? widget.note.content
         : contentController.text.trim();
 
+    widget.note.color = selectedColor.value;
+
     widget.note.save();
     BlocProvider.of<NotesCubit>(context).fetchAllNotes();
     Navigator.pop(context);
@@ -53,9 +69,8 @@ class _EditNotePageState extends State<EditNotePage> {
     final background = isDark
         ? const Color(0xFF211D23)
         : HomePage.backgroundColor;
-    final card = isDark ? const Color(0xFF332C36) : HomePage.cardColor;
     final text = isDark ? Colors.white : HomePage.textColor;
-    final secondaryText = isDark ? Colors.white70 : Colors.black87;
+    final secondaryText = Colors.black87;
     final buttonColor = isDark
         ? const Color(0xFF4B3158)
         : const Color(0xFF5C4B7D);
@@ -122,24 +137,22 @@ class _EditNotePageState extends State<EditNotePage> {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: card,
+                color: selectedColor,
                 borderRadius: BorderRadius.circular(15),
               ),
               child: TextField(
                 controller: titleController,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: text,
+                  color: Colors.black87,
                 ),
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Enter Title Here',
-                  hintStyle: TextStyle(
-                    color: isDark ? Colors.white60 : Colors.black45,
-                  ),
+                  hintStyle: TextStyle(color: Colors.black54),
                   border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                  contentPadding: EdgeInsets.symmetric(vertical: 14),
                 ),
               ),
             ),
@@ -148,7 +161,7 @@ class _EditNotePageState extends State<EditNotePage> {
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: card,
+                  color: selectedColor,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: TextField(
@@ -157,19 +170,63 @@ class _EditNotePageState extends State<EditNotePage> {
                   expands: true,
                   textAlignVertical: TextAlignVertical.top,
                   style: TextStyle(color: secondaryText, fontSize: 16),
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: 'Start writing your note here!',
                     hintStyle: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: isDark ? Colors.white60 : Colors.black45,
+                      color: Colors.black45,
                     ),
                     border: InputBorder.none,
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 12),
+
+            // شريط الألوان
+            SizedBox(
+              height: 44,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: colors.length,
+                itemBuilder: (context, index) {
+                  final itemColor = colors[index];
+                  final isSelected = selectedColor.value == itemColor.value;
+
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedColor = itemColor;
+                      });
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 5),
+                      width: 40,
+                      decoration: BoxDecoration(
+                        color: itemColor,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: isSelected
+                              ? (isDark ? Colors.white : Colors.black87)
+                              : Colors.transparent,
+                          width: 2.5,
+                        ),
+                      ),
+                      child: isSelected
+                          ? const Icon(
+                              Icons.check,
+                              size: 20,
+                              color: Colors.black87,
+                            )
+                          : null,
+                    ),
+                  );
+                },
+              ),
+            ),
+
+            const SizedBox(height: 12),
             SizedBox(
               width: double.infinity,
               height: 50,

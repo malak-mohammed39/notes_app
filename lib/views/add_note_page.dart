@@ -19,6 +19,25 @@ class _AddNotePageState extends State<AddNotePage> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController contentController = TextEditingController();
 
+  final List<Color> colors = const [
+    Color(0xFFC5B8C9),
+    Color(0xFFFFAB91),
+    Color(0xFFFFCC80),
+    Color(0xFFE6EE9C),
+    Color(0xFF80CBC4),
+    Color(0xFF90CAF9),
+    Color(0xFFF48FB1),
+    Color(0xFFD7CCC8),
+  ];
+
+  late Color selectedColor;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedColor = colors[0];
+  }
+
   @override
   void dispose() {
     titleController.dispose();
@@ -34,13 +53,13 @@ class _AddNotePageState extends State<AddNotePage> {
     final note = NoteModel(
       title: titleController.text.trim(),
       content: contentController.text.trim(),
-      isFav: false,
       date: DateTime.now().toString(),
+      color: selectedColor.value,
+      isFav: false,
       isDeleted: false,
     );
 
     context.read<NotesCubit>().AddNote(note);
-
     Navigator.pop(context);
   }
 
@@ -51,9 +70,8 @@ class _AddNotePageState extends State<AddNotePage> {
     final background = isDark
         ? const Color(0xFF211D23)
         : HomePage.backgroundColor;
-    final card = isDark ? const Color(0xFF332C36) : HomePage.cardColor;
     final text = isDark ? Colors.white : HomePage.textColor;
-    final secondaryText = isDark ? Colors.white70 : Colors.black87;
+    final secondaryText = Colors.black87;
     final buttonColor = isDark ? const Color(0xFF4B3158) : HomePage.darkPurple;
 
     return Scaffold(
@@ -98,27 +116,36 @@ class _AddNotePageState extends State<AddNotePage> {
 
                 const SizedBox(height: 16),
 
+                // حقل العنوان مزاح إلى اليمين
                 Container(
                   decoration: BoxDecoration(
-                    color: card,
+                    color: selectedColor,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: TextFormField(
                     controller: titleController,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
+                    textAlign: TextAlign.right,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: text,
+                      color: Colors.black87,
                     ),
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Enter Title Here',
                       hintStyle: TextStyle(
-                        color: isDark ? Colors.white60 : Colors.black54,
+                        color: Colors.black54,
                         fontWeight: FontWeight.bold,
                       ),
                       border: InputBorder.none,
-                      contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 14,
+                        horizontal: 16,
+                      ),
+                      errorStyle: TextStyle(
+                        color: Color(0xFF8B0000),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                      ),
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
@@ -135,7 +162,7 @@ class _AddNotePageState extends State<AddNotePage> {
                   child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: card,
+                      color: selectedColor,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: TextFormField(
@@ -144,12 +171,15 @@ class _AddNotePageState extends State<AddNotePage> {
                       expands: true,
                       textAlignVertical: TextAlignVertical.top,
                       style: TextStyle(color: secondaryText, fontSize: 16),
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: 'Start writing your note here!',
-                        hintStyle: TextStyle(
-                          color: isDark ? Colors.white60 : Colors.black45,
-                        ),
+                        hintStyle: TextStyle(color: Colors.black45),
                         border: InputBorder.none,
+                        errorStyle: TextStyle(
+                          color: Color(0xFF8B0000),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
@@ -161,7 +191,51 @@ class _AddNotePageState extends State<AddNotePage> {
                   ),
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
+
+                // شريط الألوان
+                SizedBox(
+                  height: 44,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: colors.length,
+                    itemBuilder: (context, index) {
+                      final itemColor = colors[index];
+                      final isSelected = selectedColor.value == itemColor.value;
+
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedColor = itemColor;
+                          });
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 5),
+                          width: 40,
+                          decoration: BoxDecoration(
+                            color: itemColor,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: isSelected
+                                  ? (isDark ? Colors.white : Colors.black87)
+                                  : Colors.transparent,
+                              width: 2.5,
+                            ),
+                          ),
+                          child: isSelected
+                              ? const Icon(
+                                  Icons.check,
+                                  size: 20,
+                                  color: Colors.black87,
+                                )
+                              : null,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+                const SizedBox(height: 12),
 
                 SizedBox(
                   width: double.infinity,

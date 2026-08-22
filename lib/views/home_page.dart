@@ -193,7 +193,8 @@ class _HomePageState extends State<HomePage> {
                             margin: const EdgeInsets.only(bottom: 12),
                             padding: const EdgeInsets.all(14),
                             decoration: BoxDecoration(
-                              color: card,
+                              // تطبيق لون النوت المختار
+                              color: Color(note.color),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Row(
@@ -208,10 +209,10 @@ class _HomePageState extends State<HomePage> {
                                         note.title,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
-                                          color: text,
+                                          color: Colors.black87,
                                         ),
                                       ),
                                       const SizedBox(height: 6),
@@ -219,9 +220,9 @@ class _HomePageState extends State<HomePage> {
                                         note.content,
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 14,
-                                          color: secondaryText,
+                                          color: Colors.black54,
                                         ),
                                       ),
                                     ],
@@ -235,7 +236,7 @@ class _HomePageState extends State<HomePage> {
                                         note.isFav
                                             ? Icons.favorite
                                             : Icons.favorite_border,
-                                        color: iconColor,
+                                        color: const Color(0xFF68447D),
                                         size: 24,
                                       ),
                                       onPressed: () {
@@ -243,9 +244,9 @@ class _HomePageState extends State<HomePage> {
                                       },
                                     ),
                                     IconButton(
-                                      icon: Icon(
+                                      icon: const Icon(
                                         Icons.delete_outline_rounded,
-                                        color: iconColor,
+                                        color: Color(0xFF68447D),
                                         size: 24,
                                       ),
                                       onPressed: () {
